@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Search";
+}
+
+<div>
+    <h1>Search for Youtube video:</h1>
+    <div>
+        <label for="queryInput">Enter video name:</label>
+        <input type="text" id="queryInput" name="Url">
+    </div>
+    <button id="searchButton">Search</button>
+    <div id="results"></div>
+    <button id="loadMoreButton">Load more</button>
+    <div id="toast--error" hidden>Error while downloading audio. Please try again later.</div>
+</div>
+
+<script>
+    function createVideoCard(videoData) {
+        const container = document.createElement('div');
+        container.className = "video-card"
+        
+        const title = document.createElement('h3');
+        title.textContent = videoData.title;
+        const thumbnail = document.createElement("img");
+        thumbnail.src = videoData.thumbnailUrl;
+        const author = document.createElement('h4');
+        author.textContent = videoData.author;
+        const url = document.createElement('a');
+        url.href = videoData.url;
+        
+        container.appendChild(title);
+        container.appendChild(author);
+        container.appendChild(thumbnail);
+        container.appendChild(url);
+       
+        return container;
+    }
+
+    document.getElementById("searchButton").addEventListener("click", function () {
+        const queryString = document.getElementById("queryInput").value;
+        const loadMoreButton = document.getElementById("loadMoreButton");
+        loadMoreButton.queryString = queryString;
+        loadMoreButton.nextPageToken = "";
+        
+        
+        const body = JSON.stringify({
+            SearchQuery: queryString 
+        });
+        const headers = {
+            "Content-type": "application/json"
+        };
+        
+        fetch("/Search/GetQueryResults/", {
+            method: "POST",
+            body: body,
+            headers: headers
+        })
+        .then((response) => {
+            if (!response.ok) {
+                document.getElementById("toast--error").hidden = false;
+                return;
+            }
+            
+            return response.json();
+        })
+        .then((data) => {
+            loadMoreButton.nextPageToken = data.nextPageToken;
+            
+            const resultContainer = document.getElementById("results");
+            resultContainer.replaceChildren();
+            for (const videoData of data.videos) {
+                const card = createVideoCard(videoData);
+                resultContainer.appendChild(card);
+            }
+        })
+    });
+    
+    document.getElementById('loadMoreButton').addEventListener('click', function() {
+        const resultContainer = document.getElementById("results");
+        
+        const body = JSON.stringify({
+            SearchQuery: this.queryString,
+            NextPageToken: this.nextPageToken
+        });
+        const headers = {
+            "Content-type": "application/json"
+        };
+                
+        fetch("/Search/GetQueryResults/", {
+            method: "POST",
+            body: body,
+            headers: headers
+        })
+        .then((response) => {
+            if (!response.ok) {
+                document.getElementById("toast--error").hidden = false;
+                return;
+            }
+            
+            return response.json();
+        })
+        .then((data) => {
+            loadMoreButton.nextPageToken = data.nextPageToken;
+            
+            const resultContainer = document.getElementById("results");
+            for (const videoData of data.videos) {
+                const card = createVideoCard(videoData);
+                resultContainer.appendChild(card);
+            }
+        })
+    });
+</script>
