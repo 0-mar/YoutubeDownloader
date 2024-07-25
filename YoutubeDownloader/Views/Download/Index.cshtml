@@ -16,17 +16,16 @@
 </div>
 
 <script>
-    const url = "@Html.Raw(Model.Url)"
-    const body = JSON.stringify({
-        Url: url 
-    });
+    const url = "/Download/GetResource?" + new URLSearchParams({
+        url: "@Html.Raw(Model.Url)"
+    }).toString();
+
     const headers = {
         "Content-type": "application/json"
     };
 
-    fetch("/Download/GetResource/", {
-       method: "POST",
-       body: body,
+    fetch(url, {
+       method: "GET",
        headers: headers
     })
     .then(response => {
@@ -37,48 +36,26 @@
             
             response.blob().then((blob) => {
                 const downloadUrl = URL.createObjectURL(blob);
-                                        const contentDisposition = response.headers.get("content-disposition");
-                                        let fileName = "audio.mp3";
-                                        const filenameRegex = /filename="([^"]+)"/;
-                                        const match = filenameRegex.exec(contentDisposition);
-                                        if (match && match[1]) {
-                                            fileName = match[1];
-                                        }
-                                        console.log(fileName);
-                                        const a = document.createElement('a');
-                                        a.style.display = 'none';
-                                        a.href = downloadUrl;
-                                        a.download = fileName;
-                                        document.body.appendChild(a);
-                                        a.click();
-                                        URL.revokeObjectURL(downloadUrl);
+                const contentDisposition = response.headers.get("content-disposition");
+                let fileName = "audio.mp3";
+                const filenameRegex = /filename="([^"]+)"/;
+                const match = filenameRegex.exec(contentDisposition);
+                if (match && match[1]) {
+                    fileName = match[1];
+                }
+                console.log(fileName);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = downloadUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                URL.revokeObjectURL(downloadUrl);
             });
-            
-            
-            //return response.blob();
         })
-        /*.then(blob => {
-            const downloadUrl = URL.createObjectURL(blob);
-            const contentDisposition = response.headers['Content-Disposition'];
-            console.log(contentDisposition)
-            const fileName = contentDisposition.split('filename=')[1].replace(/"/g, '');
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = downloadUrl;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            URL.revokeObjectURL(downloadUrl);
-        })*/
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
             document.getElementById("toast--error").hidden = false;
         });
-    
-    
-    /*.then((response) => {
-        if (response.status === 500) {
-            document.getElementById("toast--error").hidden = false;
-        }
-    })*/
+
 </script>

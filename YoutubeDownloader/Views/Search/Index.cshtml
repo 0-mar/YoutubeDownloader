@@ -4,17 +4,26 @@
 
 <div>
     <h1>Search for Youtube video:</h1>
-    <div>
-        <label for="queryInput">Enter video name:</label>
-        <input type="text" id="queryInput" name="Url">
-    </div>
-    <button id="searchButton">Search</button>
+    
+    <form method="get">
+        <div>
+            <label for="queryInput">Enter search query::</label>
+            <input type="text" id="queryInput" name="searchQuery">
+        </div>
+        <button type="submit" id="searchButton">Search</button>
+    </form>
+    
     <div id="results"></div>
     <button id="loadMoreButton">Load more</button>
     <div id="toast--error" hidden>Error while downloading audio. Please try again later.</div>
 </div>
 
 <script>
+    function redirect(endpoint){
+        const paths = window.location;
+        window.location.href = `${paths.origin}/${endpoint}`
+    }
+
     function createVideoCard(videoData) {
         const container = document.createElement('div');
         container.className = "video-card"
@@ -27,32 +36,40 @@
         author.textContent = videoData.author;
         const url = document.createElement('a');
         url.href = videoData.url;
+        url.textContent = videoData.url;
+        const duration = document.createElement('p');
+        author.textContent = videoData.duration;
+        
+        const downloadButton = document.createElement('button');
+        downloadButton.textContent = 'Download';
+        downloadButton.addEventListener('click', () => redirect(`Download?url=${videoData.url}`));
         
         container.appendChild(title);
         container.appendChild(author);
         container.appendChild(thumbnail);
         container.appendChild(url);
+        container.appendChild(downloadButton);
+        container.appendChild(duration);
        
         return container;
     }
 
-    document.getElementById("searchButton").addEventListener("click", function () {
+    document.getElementById("searchButton").addEventListener("click", function (event) {
+        event.preventDefault();
         const queryString = document.getElementById("queryInput").value;
         const loadMoreButton = document.getElementById("loadMoreButton");
         loadMoreButton.queryString = queryString;
         loadMoreButton.nextPageToken = "";
         
-        
-        const body = JSON.stringify({
-            SearchQuery: queryString 
-        });
         const headers = {
             "Content-type": "application/json"
         };
+        const url = "/Search/GetQueryResults?" + new URLSearchParams({
+            searchQuery: queryString
+        }).toString();
         
-        fetch("/Search/GetQueryResults/", {
-            method: "POST",
-            body: body,
+        fetch(url, {
+            method: "GET",
             headers: headers
         })
         .then((response) => {
@@ -76,19 +93,18 @@
     });
     
     document.getElementById('loadMoreButton').addEventListener('click', function() {
-        const resultContainer = document.getElementById("results");
+        const resultContainer = document.getElementById("results");        
         
-        const body = JSON.stringify({
-            SearchQuery: this.queryString,
-            NextPageToken: this.nextPageToken
-        });
         const headers = {
             "Content-type": "application/json"
         };
+        const url = "/Search/GetQueryResults?" + new URLSearchParams({
+            searchQuery: this.queryString,
+            nextPageToken: this.nextPageToken
+        }).toString();
                 
-        fetch("/Search/GetQueryResults/", {
-            method: "POST",
-            body: body,
+        fetch(url, {
+            method: "GET",
             headers: headers
         })
         .then((response) => {
@@ -101,8 +117,7 @@
         })
         .then((data) => {
             loadMoreButton.nextPageToken = data.nextPageToken;
-            
-            const resultContainer = document.getElementById("results");
+
             for (const videoData of data.videos) {
                 const card = createVideoCard(videoData);
                 resultContainer.appendChild(card);

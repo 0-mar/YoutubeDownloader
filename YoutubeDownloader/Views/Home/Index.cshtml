@@ -4,10 +4,10 @@
 
 <div>
     <h1>Download Youtube video:</h1>
-    <form method="post" asp-controller="Download" asp-action="Index">
+    <form method="get" asp-controller="Download" asp-action="Index">
         <div>
             <label for="urlInput">Enter URL:</label>
-            <input type="text" id="urlInput" name="Url">
+            <input type="text" id="urlInput" name="url">
         </div>
         <button type="submit">Download</button>
     </form>

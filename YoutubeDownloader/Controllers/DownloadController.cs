@@ -7,7 +7,7 @@ namespace YoutubeDownloader.Controllers
 {
     public class DownloadController : Controller
     {
-        [HttpPost]
+        [HttpGet]
         public IActionResult Index(string url)
         {
             var urlModel = new UrlModel(url);
@@ -15,18 +15,17 @@ namespace YoutubeDownloader.Controllers
 
         }
         
-        [HttpPost]
-        public async Task<IActionResult> GetResource([FromBody] UrlModel urlModel)
+        [HttpGet]
+        public async Task<IActionResult> GetResource(string url)
         {
             var youtube = new YoutubeClient();
             string filePath = "";
             
             try
             {
-                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(urlModel.Url);
+                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(url);
                 var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
-                
-                var video = await youtube.Videos.GetAsync(urlModel.Url);
+                var video = await youtube.Videos.GetAsync(url);
                 filePath = $"{video.Title}.{streamInfo.Container.Name}";
 
                 await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);

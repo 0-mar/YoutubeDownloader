@@ -23,15 +23,9 @@ namespace YoutubeDownloader.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<VideoDataDto>>> GetQueryResults([FromBody] SearchModel searchModel)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<VideoDataDto>>> GetQueryResults(SearchModel searchModel)
         {
-            /*var youtube = new YoutubeClient();
-            var videos = await youtube.Search.GetVideosAsync(searchModel.SearchQuery);
-            var result = videos.Select(v => new VideoDataDto(v.Url, v.Author, v.Title, v.Duration, v.Thumbnails.GetWithHighestResolution().Url));
-
-            return Json(result);*/
-            
             var data = await _youtubeService.GetVideoData(searchModel);
             return Json(data);
         }
