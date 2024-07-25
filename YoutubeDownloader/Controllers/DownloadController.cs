@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDownloader.Models;
+using YoutubeDownloader.Services;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 
@@ -7,6 +8,14 @@ namespace YoutubeDownloader.Controllers
 {
     public class DownloadController : Controller
     {
+
+        private readonly IYoutubeService _youtubeService;
+
+        public DownloadController(IYoutubeService youtubeService)
+        {
+            _youtubeService = youtubeService;
+        }
+        
         [HttpGet]
         public IActionResult Index(string url)
         {
@@ -18,29 +27,17 @@ namespace YoutubeDownloader.Controllers
         [HttpGet]
         public async Task<IActionResult> GetResource(string url)
         {
-            var youtube = new YoutubeClient();
-            string filePath = "";
+            var filePath = "";
             
             try
             {
-                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(url);
-                var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
-                var video = await youtube.Videos.GetAsync(url);
-                filePath = $"{video.Title}.{streamInfo.Container.Name}";
-
-                await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
+                filePath = await _youtubeService.DownloadAudio(url);
                 
                 // when I put 'using' in front, it gives me System.ObjectDisposedException: Cannot access a closed file.
                 FileStream fileStream = new FileStream(filePath, FileMode.Open,FileAccess.Read);
                 
-                MemoryStream memoryStream = new MemoryStream();
-                await fileStream.CopyToAsync(memoryStream);
-                await fileStream.DisposeAsync();
-                //System.IO.File.Delete(filePath);
-                
-                memoryStream.Position = 0;
                 // Return the file to the client
-                return File(memoryStream, "audio/mpeg", filePath);
+                return File(fileStream, "audio/mpeg", filePath);
             }
             catch (ArgumentException ex)
             {
