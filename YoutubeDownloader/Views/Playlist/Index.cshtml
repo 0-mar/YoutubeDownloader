@@ -1,61 +1,16 @@
 ﻿@model UrlModel
 
 @{
-    ViewData["Title"] = "Download";
+    ViewData["Title"] = "Download playlist";
 }
 
 <div>
-    <h2>Your download will start shortly</h2>
-    <p>
-        In a moment, the server will get the audio from YouTube and download will start afterwards.
-    </p>
-    <p>
-        Requested video URL: <a href="@Model.Url">@Model.Url</a>
-    </p>
-    <div id="toast--error" hidden>Error while downloading audio. Please try again later.</div>
+    <h2>Download playlist</h2>
+    <input type="text" id="playlistUrlInput" name="url">
+    <button disabled autocomplete="off" id="playlist-download-btn">Download selected</button>
+    <ul id="selected-songs-list"></ul>
+    <div id="playlist-container"></div>
+    <div id="toast--error" hidden>Error while downloading playlist. Please try again later.</div>
 </div>
 
-<script>
-    const url = "/Download/GetResource?" + new URLSearchParams({
-        url: "@Html.Raw(Model.Url)"
-    }).toString();
-
-    const headers = {
-        "Content-type": "application/json"
-    };
-
-    fetch(url, {
-       method: "GET",
-       headers: headers
-    })
-    .then(response => {
-            if (!response.ok) {
-                document.getElementById("toast--error").hidden = false;
-                return;
-            }
-            
-            response.blob().then((blob) => {
-                const downloadUrl = URL.createObjectURL(blob);
-                const contentDisposition = response.headers.get("content-disposition");
-                let fileName = "audio.mp3";
-                const filenameRegex = /filename="([^"]+)"/;
-                const match = filenameRegex.exec(contentDisposition);
-                if (match && match[1]) {
-                    fileName = match[1];
-                }
-                console.log(fileName);
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = downloadUrl;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                URL.revokeObjectURL(downloadUrl);
-            });
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-            document.getElementById("toast--error").hidden = false;
-        });
-
-</script>
+<script type="module" src="~/js/playlistPage/index.js"></script>
