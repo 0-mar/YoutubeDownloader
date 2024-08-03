@@ -101,14 +101,14 @@ public class YoutubeService : IYoutubeService
         return new VideoDataBatchDto(root.nextPageToken, videoDataDtos);
     }
 
-    public async Task<string> DownloadAudio(string url)
+    public async Task<string> DownloadAudio(string url, string directory="")
     {
         var filePath = "";
 
         var streamManifest = await Youtube.Videos.Streams.GetManifestAsync(url);
         var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
         var video = await Youtube.Videos.GetAsync(url);
-        filePath = $"{video.Title}.{streamInfo.Container.Name}";
+        filePath = Path.Combine(directory, $"{video.Title}.{streamInfo.Container.Name}");
 
         await Youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
 
@@ -120,7 +120,11 @@ public class YoutubeService : IYoutubeService
         var playlist = await Youtube.Playlists.GetAsync(url);
 
         var playlistTitle = playlist.Title;
-        var playlistAuthor = playlist.Author.ChannelTitle;
+        var playlistAuthor = "Author not available";
+        if (playlist.Author != null)
+        {
+            playlistAuthor = playlist.Author.ChannelTitle;
+        }
         var playlistThumbnailUrl = playlist.Thumbnails.GetWithHighestResolution().Url;
 
         List<VideoDataDto> videoData = new List<VideoDataDto>();
