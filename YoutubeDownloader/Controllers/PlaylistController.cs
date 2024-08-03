@@ -54,7 +54,7 @@ namespace YoutubeDownloader.Controllers
             {
                 try
                 {
-                    var filePath = await _youtubeService.DownloadAudio(videoUrl);
+                    var filePath = await _youtubeService.DownloadAudio(videoUrl, tempDir);
                     audioFiles.Add(filePath);
                 }
                 catch (Exception ex)
@@ -65,7 +65,7 @@ namespace YoutubeDownloader.Controllers
             
             // Create a ZIP file
             var zipFileName = "playlist";
-            var zipFilePath = Path.Combine(Path.GetTempPath(), $"{zipFileName}.zip");
+            var zipFilePath = Path.Combine(tempDir, $"{zipFileName}.zip");
 
             using (var zip = ZipFile.Open(zipFilePath, ZipArchiveMode.Create))
             {
