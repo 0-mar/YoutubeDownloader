@@ -64,8 +64,8 @@ namespace YoutubeDownloader.Controllers
             }
             
             // Create a ZIP file
-            var zipFileName = "playlist";
-            var zipFilePath = Path.Combine(tempDir, $"{zipFileName}.zip");
+            var zipFileName = "playlist.zip";
+            var zipFilePath = Path.Combine(tempDir, $"{zipFileName}");
 
             using (var zip = ZipFile.Open(zipFilePath, ZipArchiveMode.Create))
             {
