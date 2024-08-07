@@ -18,7 +18,7 @@ const Utils = (function () {
         const downloadUrl = URL.createObjectURL(blob);
         const contentDisposition = response.headers.get("content-disposition");
         let fileName = "unnamed";
-        const filenameRegex = /filename="([^"]+)"/;
+        const filenameRegex = /attachment; *filename="?(.+)"?;/;
         const match = filenameRegex.exec(contentDisposition);
         if (match && match[1]) {
             fileName = match[1];
