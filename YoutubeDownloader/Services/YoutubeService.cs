@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using YoutubeDownloader.DTOs;
 using YoutubeExplode;
 using YoutubeExplode.Common;
-using YoutubeExplode.Videos.Streams;
+using YoutubeExplode.Converter;
 
 using SearchRoot = YoutubeDownloader.Json.Search.Root;
 using VideoRoot = YoutubeDownloader.Json.Video.Root;
@@ -14,8 +14,6 @@ namespace YoutubeDownloader.Services;
 public class YoutubeService : IYoutubeService
 {
     private readonly HttpClient _httpClient;
-    private const string API_KEY = "AIzaSyAb6WPNNtjoVTFAuFq2TiukDCCbQtyLJqU";
-
     private YoutubeClient Youtube;
 
     public YoutubeService(HttpClient httpClient)
@@ -31,7 +29,7 @@ public class YoutubeService : IYoutubeService
         {
             { "id", String.Join(",", videoIds) },
             { "part", "contentDetails" },
-            { "key", API_KEY },
+            { "key", Environment.GetEnvironmentVariable("YOUTUBE_API_KEY") },
         };
 
         var url = new Uri(QueryHelpers.AddQueryString(baseUrl, parameters));
@@ -61,7 +59,7 @@ public class YoutubeService : IYoutubeService
             { "q", searchQuery },
             { "part", "snippet" },
             { "type", "video" },
-            { "key", API_KEY },
+            { "key", Environment.GetEnvironmentVariable("YOUTUBE_API_KEY") },
             { "maxResults", "15" }
         };
         if (nextPageToken != "")
@@ -101,16 +99,21 @@ public class YoutubeService : IYoutubeService
         return new VideoDataBatchDto(root.nextPageToken, videoDataDtos);
     }
 
-    public async Task<string> DownloadAudio(string url, string directory="")
+    public async Task<string> DownloadAudio(string url, string directory="", string extension="mp3")
     {
         var filePath = "";
 
-        var streamManifest = await Youtube.Videos.Streams.GetManifestAsync(url);
+        /*var streamManifest = await Youtube.Videos.Streams.GetManifestAsync(url);
         var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
-        var video = await Youtube.Videos.GetAsync(url);
-        filePath = Path.Combine(directory, $"{video.Title}.{streamInfo.Container.Name}");
+        var video = await Youtube.Videos.GetAsync(url);*/
+        //filePath = Path.Combine(directory, $"{video.Title}.{streamInfo.Container.Name}");
+        //filePath = Path.Combine(directory, $"{video.Title}.mp3");
 
-        await Youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
+        //await Youtube.Videos.Streams.DownloadAsync(streamInfo, filePath);
+        
+        var video = await Youtube.Videos.GetAsync(url);
+        filePath = Path.Combine(directory, $"{video.Title}.{extension}");
+        await Youtube.Videos.DownloadAsync(url, filePath);
 
         return filePath;
     }
