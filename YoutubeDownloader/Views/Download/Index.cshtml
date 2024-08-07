@@ -1,4 +1,4 @@
-﻿@model UrlModel
+﻿@model DownloadModel
 
 @{
     ViewData["Title"] = "Download";
@@ -12,6 +12,7 @@
     <p>
         Requested video URL: <a id="video-url" href="@Model.Url">@Model.Url</a>
     </p>
+    <data id="type-data" value="@Model.Type"></data>
     <div id="toast--error" hidden>Error while downloading audio. Please try again later.</div>
 </div>
 
