@@ -46,12 +46,18 @@ const Components = (function () {
     const downloadVideoCard = function (videoData) {
         const card = videoCard(videoData);
 
-        const downloadButton = document.createElement('button');
-        downloadButton.className = "video-download-btn"
-        downloadButton.textContent = 'Download';
-        downloadButton.addEventListener('click', () => Utils.redirect(`Download?url=${videoData.url}`));
+        const downloadAudioButton = document.createElement('button');
+        downloadAudioButton.className = "video-download-btn"
+        downloadAudioButton.textContent = 'Download audio';
+        downloadAudioButton.addEventListener('click', () => Utils.redirect(`Download?url=${videoData.url}&type=audio`));
 
-        card.appendChild(downloadButton);
+        const downloadVideoButton = document.createElement('button');
+        downloadVideoButton.className = "video-download-btn"
+        downloadVideoButton.textContent = 'Download video with audio';
+        downloadVideoButton.addEventListener('click', () => Utils.redirect(`Download?url=${videoData.url}&type=video`));
+
+        card.appendChild(downloadAudioButton);
+        card.appendChild(downloadVideoButton);
         
         return card;
     }
