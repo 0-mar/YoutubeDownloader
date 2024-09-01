@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDownloader.Models;
 using YoutubeDownloader.Services;
@@ -6,6 +7,8 @@ using YoutubeExplode.Videos.Streams;
 
 namespace YoutubeDownloader.Controllers
 {
+    
+    [Authorize(Roles = "Regular")]
     public class DownloadController : Controller
     {
 
@@ -29,7 +32,7 @@ namespace YoutubeDownloader.Controllers
         [HttpGet]
         public IActionResult Index(string url, string type)
         {
-            var downloadModel = new DownloadModel(url, type);
+            var downloadModel = new DownloadViewModel(url, type);
             return View(downloadModel);
 
         }

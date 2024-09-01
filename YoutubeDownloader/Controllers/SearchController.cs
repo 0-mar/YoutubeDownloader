@@ -1,14 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDownloader.DTOs;
 using YoutubeDownloader.Models;
 using YoutubeDownloader.Services;
-using YoutubeExplode;
-using YoutubeExplode.Common;
-using YoutubeExplode.Search;
-using YoutubeExplode.Videos.Streams;
 
 namespace YoutubeDownloader.Controllers
 {
+    
+    [Authorize(Roles = "Regular")]
     public class SearchController : Controller
     {
         private readonly IYoutubeService _youtubeService;
@@ -25,9 +24,9 @@ namespace YoutubeDownloader.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<VideoDataDto>>> GetQueryResults(SearchModel searchModel)
+        public async Task<ActionResult<IEnumerable<VideoDataDto>>> GetQueryResults(SearchViewModel searchViewModel)
         {
-            var data = await _youtubeService.GetVideoInfo(searchModel.SearchQuery, searchModel.NextPageToken);
+            var data = await _youtubeService.GetVideoInfo(searchViewModel.SearchQuery, searchViewModel.NextPageToken);
             return Json(data);
         }
     }
