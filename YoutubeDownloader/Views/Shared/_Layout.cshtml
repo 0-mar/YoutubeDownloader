@@ -9,19 +9,21 @@
     <link rel="stylesheet" href="~/YoutubeDownloader.styles.css" asp-append-version="true"/>
 </head>
 <body>
-<header>
-</header>
-<div class="navbar">
-    Welcome, @User.Identity?.Name
-</div>
-<div class="container">
-    <main role="main">
+<div class="wrapper">
+    <header>
+        <div class="navbar">
+            Welcome, @User.Identity?.Name
+        </div>
+    </header>
+
+    <main class="container" role="main">
         @RenderBody()
     </main>
+
+    <footer>
+    </footer>
 </div>
 
-<footer>
-</footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
 <script src="~/js/site.js" asp-append-version="true"></script>
