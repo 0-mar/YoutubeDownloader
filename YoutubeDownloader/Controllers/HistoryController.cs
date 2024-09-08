@@ -32,6 +32,15 @@ namespace YoutubeDownloader.Controllers
                     .OrderBy(b => b.DownloadedOn)
                     .ThenBy(b => b.Id)
                     .Take(10)
+                    .Select(b => new HistoryRecordDto
+                    {
+                        DownloadedOn = b.DownloadedOn,
+                        Id = b.Id,
+                        ThumbnailUrl = b.ThumbnailUrl,
+                        UserId = b.UserId,
+                        VideoTitle = b.VideoTitle,
+                        VideoUrl = b.VideoUrl
+                    })
                     .ToListAsync();
 
                 return new HistoryRecordsPageDto
@@ -46,6 +55,15 @@ namespace YoutubeDownloader.Controllers
                 .ThenBy(b => b.Id)
                 .Where(b => b.DownloadedOn > lastDownloadDate || (b.DownloadedOn == lastDownloadDate && b.Id > lastId))
                 .Take(10)
+                .Select(b => new HistoryRecordDto
+                {
+                    DownloadedOn = b.DownloadedOn,
+                    Id = b.Id,
+                    ThumbnailUrl = b.ThumbnailUrl,
+                    UserId = b.UserId,
+                    VideoTitle = b.VideoTitle,
+                    VideoUrl = b.VideoUrl
+                })
                 .ToListAsync();
 
             return new HistoryRecordsPageDto
