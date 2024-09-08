@@ -26,7 +26,7 @@ namespace YoutubeDownloader.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<VideoDataDto>>> GetQueryResults(SearchViewModel searchViewModel)
         {
-            var data = await _youtubeService.GetVideoInfo(searchViewModel.SearchQuery, searchViewModel.NextPageToken);
+            var data = await _youtubeService.GetVideoSearchData(searchViewModel.SearchQuery, searchViewModel.NextPageToken);
             return Json(data);
         }
     }
