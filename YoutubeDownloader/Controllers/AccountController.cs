@@ -20,7 +20,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Login(string returnUrl = null)
+    public IActionResult Login(string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl;
         return View();
@@ -28,7 +28,7 @@ public class AccountController : Controller
     
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel credentials, [FromQuery] string returnUrl = null)
+    public async Task<IActionResult> Login(LoginViewModel credentials, [FromQuery] string? returnUrl = null)
     {
         if (!ModelState.IsValid)
         {
@@ -113,7 +113,7 @@ public class AccountController : Controller
     }
     
     [HttpGet]
-    public async Task<IActionResult> EmailConfirmation(string userId, string code)
+    public async Task<IActionResult> EmailConfirmation(string? userId, string? code)
     {
         if (userId == null || code == null)
         {
@@ -171,7 +171,7 @@ public class AccountController : Controller
 
     
     [HttpGet]
-    public async Task<IActionResult> PasswordChange(string userId, string code)
+    public async Task<IActionResult> PasswordChange(string? userId, string? code)
     {
         if (userId == null || code == null)
         {
@@ -191,7 +191,7 @@ public class AccountController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> PasswordChange(PasswordChangeViewModel viewModel, [FromQuery] string userId, [FromQuery] string code)
+    public async Task<IActionResult> PasswordChange(PasswordChangeViewModel viewModel, [FromQuery] string? userId, [FromQuery] string? code)
     {
         if (userId == null || code == null)
         {
