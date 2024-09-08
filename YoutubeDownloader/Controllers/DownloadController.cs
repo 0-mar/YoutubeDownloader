@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDownloader.Models;
 using YoutubeDownloader.Services;
-using YoutubeExplode;
-using YoutubeExplode.Videos.Streams;
 
 namespace YoutubeDownloader.Controllers
 {
