@@ -64,7 +64,7 @@ const Components = (function () {
     
     const historyRecordCard = function (historyRecordData) {
         const container = document.createElement('div');
-        container.className = "video-card";
+        container.className = "history-card";
 
         const date = document.createElement('p');
         date.textContent = Utils.convertDateFromIso(historyRecordData.downloadedOn);
@@ -117,12 +117,52 @@ const Components = (function () {
         return container;
     }
     
+    const userCard = function (userData) {
+        const container = document.createElement('div');
+        container.className = 'user-card';
+        
+        const id = document.createElement('p');
+        id.textContent = `ID: ${userData.id}`;
+        
+        const role = document.createElement('p');
+        role.textContent = userData.role;
+
+        const email = document.createElement('h2');
+        email.textContent = userData.email;
+
+        const userName = document.createElement('h3');
+        userName.textContent = userData.userName;
+
+        const date = document.createElement('p');
+        date.textContent = Utils.convertDateFromIso(userData.createdOn);        
+        
+        const buttonContainer = document.createElement('div');
+        
+        const detailsBtn = document.createElement('a');
+        detailsBtn.href = `/Admin/Users/Details/${userData.id}`;
+        detailsBtn.textContent = "Details";
+
+        const editBtn = document.createElement('a');
+        editBtn.href = `/Admin/Users/Edit/${userData.id}`;
+        editBtn.textContent = "Edit";
+
+        const deleteBtn = document.createElement('a');
+        deleteBtn.href = `/Admin/Users/Delete/${userData.id}`;
+        deleteBtn.textContent = "Delete";
+        
+        buttonContainer.append(detailsBtn, editBtn, deleteBtn);
+        
+        container.append(id, role, email, userName, date, buttonContainer);
+        return container;
+    }
+    
     return {
         downloadVideoCard,
         playlistCard,
         historyRecordCard,
         loadingSkeleton,
-        noMoreDataCard
+        noMoreDataCard,
+        userCard
     }
 })();
 
