@@ -1,6 +1,5 @@
-using System.Net;
 using Microsoft.AspNetCore.Identity;
-using YoutubeDownloader.Models.Database;
+using YoutubeDownloader.Areas.Admin.Models;
 
 namespace YoutubeDownloader.Seeding;
 
