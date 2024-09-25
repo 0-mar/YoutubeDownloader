@@ -2,8 +2,8 @@ import RequestApi from "../requestApi.js";
 import Components from "../components.js";
 
 
-let lastId = undefined
-let lastDownloadDate = undefined
+let lastId = null
+let lastDownloadDate = null
 
 async function loadRecords () {
     const container = document.getElementById('history-container');
