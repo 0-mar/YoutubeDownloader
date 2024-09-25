@@ -2,8 +2,8 @@ using YoutubeDownloader.Models.Database;
 
 namespace YoutubeDownloader.DTOs;
 
-public class HistoryRecordsPageDto
+public class PageDto<T>
 {
-    public List<HistoryRecordDto>? Page { get; set; }
+    public List<T>? Page { get; set; }
     public int Length { get; set; }
 }
