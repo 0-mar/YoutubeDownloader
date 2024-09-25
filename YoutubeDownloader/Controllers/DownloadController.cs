@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using YoutubeDownloader.Areas.Admin.Enums;
 using YoutubeDownloader.Models;
 using YoutubeDownloader.Services;
 
 namespace YoutubeDownloader.Controllers
 {
     
-    [Authorize(Roles = "Regular")]
+    [Authorize(Roles = nameof(UserRole.Regular))]
     public class DownloadController : Controller
     {
 

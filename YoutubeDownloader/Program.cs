@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using YoutubeDownloader.Areas.Admin.Models;
 using YoutubeDownloader.Database;
 using YoutubeDownloader.Identity;
-using YoutubeDownloader.Models.Database;
 using YoutubeDownloader.Seeding;
 using YoutubeDownloader.Services;
 
@@ -42,12 +42,12 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // seeding
-using (var scope = app.Services.CreateScope())  
+/*using (var scope = app.Services.CreateScope())  
 {  
     var seeder = scope.ServiceProvider.GetRequiredService<Seeder>();
 
     await seeder.SeedAsync();
-} 
+}*/ 
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -64,6 +64,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

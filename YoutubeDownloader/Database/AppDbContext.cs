@@ -1,6 +1,7 @@
 using System.Transactions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using YoutubeDownloader.Areas.Admin.Models;
 using YoutubeDownloader.Models.Database;
 
 namespace YoutubeDownloader.Database;

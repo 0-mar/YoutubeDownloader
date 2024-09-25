@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using YoutubeDownloader.Models.Database;
+using YoutubeDownloader.Areas.Admin.Models;
 
 namespace YoutubeDownloader.Identity;
 

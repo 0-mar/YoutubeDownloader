@@ -1,12 +1,13 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using YoutubeDownloader.Areas.Admin.Enums;
 using YoutubeDownloader.Models;
 
 namespace YoutubeDownloader.Controllers;
 
 
-[Authorize(Roles = "Regular")]
+[Authorize(Roles = nameof(UserRole.Regular))]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

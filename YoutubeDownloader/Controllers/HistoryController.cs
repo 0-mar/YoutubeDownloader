@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using YoutubeDownloader.Areas.Admin.Enums;
 using YoutubeDownloader.Database;
 using YoutubeDownloader.DTOs;
 
 namespace YoutubeDownloader.Controllers
 {
     
-    [Authorize(Roles = "Regular")]
+    [Authorize(Roles = nameof(UserRole.Regular))]
     public class HistoryController : Controller
     {
         private readonly AppDbContext _context;
@@ -24,7 +25,7 @@ namespace YoutubeDownloader.Controllers
         }
 
         [HttpGet]
-        public async Task<HistoryRecordsPageDto> GetHistoryRecords(Guid? lastId = null, DateTime? lastDownloadDate = null)
+        public async Task<PageDto<HistoryRecordDto>> GetHistoryRecords(Guid? lastId = null, DateTime? lastDownloadDate = null)
         {
             if (lastId == null && lastDownloadDate == null)
             {
@@ -43,7 +44,7 @@ namespace YoutubeDownloader.Controllers
                     })
                     .ToListAsync();
 
-                return new HistoryRecordsPageDto
+                return new PageDto<HistoryRecordDto>
                 {
                     Page = firstPage,
                     Length = firstPage.Count
@@ -66,7 +67,7 @@ namespace YoutubeDownloader.Controllers
                 })
                 .ToListAsync();
 
-            return new HistoryRecordsPageDto
+            return new PageDto<HistoryRecordDto>
             {
                 Page = nextPage,
                 Length = nextPage.Count

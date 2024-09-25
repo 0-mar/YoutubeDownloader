@@ -36,7 +36,18 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Areas\Admin\Data\" />
       <Folder Include="wwwroot\js\homePage\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Admin\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Admin\Users.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Areas\Admin\Views\Users\Index.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Users\Index.cshtml" />
     </ItemGroup>
 
 </Project>

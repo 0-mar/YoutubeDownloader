@@ -1,7 +1,7 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using YoutubeDownloader.Models.Database;
 
-namespace YoutubeDownloader.Models.Database;
+namespace YoutubeDownloader.Areas.Admin.Models;
 
 public class User : IdentityUser
 {

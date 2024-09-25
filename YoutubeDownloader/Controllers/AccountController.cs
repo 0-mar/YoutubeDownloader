@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using YoutubeDownloader.Models.Database;
+using YoutubeDownloader.Areas.Admin.Enums;
+using YoutubeDownloader.Areas.Admin.Models;
 using YoutubeDownloader.ViewModels;
 
 namespace YoutubeDownloader.Controllers;
@@ -81,7 +82,7 @@ public class AccountController : Controller
                     new { userId = user.Id, code = code }, 
                     protocol: HttpContext.Request.Scheme);
                 
-                await _userManager.AddToRoleAsync(user, "Regular");
+                await _userManager.AddToRoleAsync(user, nameof(UserRole.Regular));
                 await _emailSender.SendEmailAsync(model.Email, "Confirm your email",
                     $"Please confirm your account by clicking <a href='{callbackUrl}'>here</a>.");
 

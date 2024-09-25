@@ -1,3 +1,5 @@
+using YoutubeDownloader.Areas.Admin.Models;
+
 namespace YoutubeDownloader.Models.Database;
 
 public class HistoryRecord : BaseEntity
